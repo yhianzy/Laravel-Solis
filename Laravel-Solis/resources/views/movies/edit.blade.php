@@ -15,7 +15,7 @@
                         {{-- Poster preview --}}
                         <div class="col-md-3 text-center">
                             @if($movie->poster)
-                                <img src="{{ str_starts_with($movie->poster,'http') ? $movie->poster : Storage::url($movie->poster) }}"
+                                <img src="{{ $movie->poster }}"
                                     class="rounded mb-2" style="width:100%;max-height:200px;object-fit:cover">
                             @else
                                 <div class="rounded mb-2 d-flex align-items-center justify-content-center"

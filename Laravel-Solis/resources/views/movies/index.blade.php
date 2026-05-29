@@ -109,7 +109,7 @@
                         <td class="text-muted">{{ $loop->iteration }}</td>
                         <td>
                             @if($movie->poster)
-                                <img src="{{ str_starts_with($movie->poster,'http') ? $movie->poster : Storage::url($movie->poster) }}"
+                                <img src="{{ $movie->poster }}"
                                     class="rounded" width="38" height="52" style="object-fit:cover">
                             @else
                                 <div class="rounded d-flex align-items-center justify-content-center"
@@ -179,7 +179,7 @@
             <div class="movie-card h-100" onclick="showDetail({{ $movie->id }})">
                 <div class="poster-wrap">
                     @if($movie->poster)
-                        <img src="{{ str_starts_with($movie->poster,'http') ? $movie->poster : Storage::url($movie->poster) }}" alt="{{ $movie->title }}">
+                        <img src="{{ $movie->poster }}" alt="{{ $movie->title }}">
                     @else
                         <i class="bi bi-film"></i>
                     @endif
@@ -334,19 +334,21 @@
 <div id="movieData" style="display:none">
     @foreach($movies as $m)
     <div data-id="{{ $m->id }}"
-         data-title="{{ $m->title }}"
+         data-title="{{ e($m->title) }}"
          data-genre="{{ $m->genre }}"
          data-year="{{ $m->year }}"
          data-rating="{{ $m->rating ?? '—' }}"
          data-status="{{ $m->status }}"
-         data-director="{{ $m->director ?? '—' }}"
-         data-cast="{{ $m->cast ?? '—' }}"
+         data-director="{{ e($m->director ?? '—') }}"
+         data-cast="{{ e($m->cast ?? '—') }}"
          data-duration="{{ $m->duration ? $m->duration.' min' : '—' }}"
          data-language="{{ $m->language ?? '—' }}"
-         data-description="{{ $m->description ?? '' }}"
-         data-poster="{{ $m->poster ? (str_starts_with($m->poster,'http') ? $m->poster : Storage::url($m->poster)) : '' }}"
+         data-description="{{ e($m->description ?? '') }}"
          data-favorite="{{ $m->is_favorite ? '1' : '0' }}"
          data-edit="{{ route('movies.edit', $m) }}">
+        @if($m->poster)
+        <img class="movie-poster-data" src="{{ $m->poster }}" style="display:none" alt="">
+        @endif
     </div>
     @endforeach
 </div>
@@ -384,8 +386,10 @@ function showDetail(id) {
     if (!el) return;
     const d = el.dataset;
     const sc = {Watched:'badge-watched', Unwatched:'badge-unwatched', Watchlist:'badge-watchlist'};
-    const poster = d.poster
-        ? '<img src="' + d.poster + '" style="width:100%;height:260px;object-fit:cover">'
+    const posterImg = el.querySelector('.movie-poster-data');
+    const posterSrc = posterImg ? posterImg.src : '';
+    const poster = posterSrc
+        ? '<img src="' + posterSrc + '" style="width:100%;height:260px;object-fit:cover">'
         : '<div style="width:100%;height:260px;background:linear-gradient(135deg,#6366f1,#06b6d4);display:flex;align-items:center;justify-content:center"><i class="bi bi-film text-white" style="font-size:4rem;opacity:0.4"></i></div>';
 
     document.getElementById('detailTitle').textContent = d.title;
