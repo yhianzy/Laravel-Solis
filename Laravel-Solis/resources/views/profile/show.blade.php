@@ -10,7 +10,7 @@
             <div class="card-body pt-0 px-4 pb-4">
                 <div class="d-flex justify-content-between align-items-end mb-3" style="margin-top:-44px">
                     @if($user->profile_picture)
-                        <img src="{{ Storage::url($user->profile_picture) }}" class="rounded-circle"
+                        <img src="{{ $user->profile_picture }}" class="rounded-circle"
                             width="88" height="88" style="object-fit:cover;border:4px solid #fff;box-shadow:0 4px 14px rgba(0,0,0,0.12)">
                     @else
                         <div class="rounded-circle d-flex align-items-center justify-content-center"

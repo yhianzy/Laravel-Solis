@@ -15,7 +15,7 @@
                     <!-- Avatar upload -->
                     <div class="d-flex align-items-center gap-4 mb-4 p-3" style="background:#f8faff;border-radius:12px;border:1px dashed #c7d2fe">
                         @if($user->profile_picture)
-                            <img src="{{ Storage::url($user->profile_picture) }}" class="rounded-circle"
+                            <img src="{{ $user->profile_picture }}" class="rounded-circle"
                                 width="72" height="72" style="object-fit:cover;border:3px solid #e0e7ff">
                         @else
                             <div class="rounded-circle d-flex align-items-center justify-content-center"

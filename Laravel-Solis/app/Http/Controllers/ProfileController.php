@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
 {
@@ -24,20 +23,20 @@ class ProfileController extends Controller
         $user = Auth::user();
 
         $request->validate([
-            'name'    => 'required|string|max:255',
-            'email'   => 'required|email|unique:users,email,' . $user->id,
-            'address' => 'nullable|string|max:500',
-            'gender'  => 'nullable|in:Male,Female,Other',
-            'profile_picture' => 'nullable|image|max:2048',
+            'name'             => 'required|string|max:255',
+            'email'            => 'required|email|unique:users,email,' . $user->id,
+            'address'          => 'nullable|string|max:500',
+            'gender'           => 'nullable|in:Male,Female,Other',
+            'profile_picture'  => 'nullable|image|max:3048',
         ]);
 
         $data = $request->only('name', 'email', 'address', 'gender');
 
         if ($request->hasFile('profile_picture')) {
-            if ($user->profile_picture) {
-                Storage::disk('public')->delete($user->profile_picture);
-            }
-            $data['profile_picture'] = $request->file('profile_picture')->store('profiles', 'public');
+            $file            = $request->file('profile_picture');
+            $mime            = $file->getMimeType();
+            $content         = base64_encode(file_get_contents($file->getRealPath()));
+            $data['profile_picture'] = 'data:' . $mime . ';base64,' . $content;
         }
 
         if ($request->filled('password')) {

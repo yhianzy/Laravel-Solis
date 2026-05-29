@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Movie;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 
 class MovieController extends Controller
 {
@@ -34,12 +33,12 @@ class MovieController extends Controller
 
         $sort = $request->get('sort', 'latest');
         match($sort) {
-            'title'        => $query->orderBy('title'),
-            'year_asc'     => $query->orderBy('year'),
-            'year_desc'    => $query->orderByDesc('year'),
-            'rating_desc'  => $query->orderByDesc('rating'),
-            'rating_asc'   => $query->orderBy('rating'),
-            default        => $query->latest(),
+            'title'       => $query->orderBy('title'),
+            'year_asc'    => $query->orderBy('year'),
+            'year_desc'   => $query->orderByDesc('year'),
+            'rating_desc' => $query->orderByDesc('rating'),
+            'rating_asc'  => $query->orderBy('rating'),
+            default       => $query->latest(),
         };
 
         $movies = $query->paginate(12)->withQueryString();
@@ -56,15 +55,15 @@ class MovieController extends Controller
             'year'     => 'required|integer|min:1900|max:' . (date('Y') + 1),
             'rating'   => 'nullable|numeric|min:0|max:10',
             'duration' => 'nullable|integer|min:1',
-            'poster'   => 'nullable|image|max:2048',
+            'poster'   => 'nullable|image|max:3048',
         ]);
 
         $data = $request->only('title','genre','year','rating','description','director','cast','duration','language','status');
-        $data['user_id'] = Auth::id();
+        $data['user_id']     = Auth::id();
         $data['is_favorite'] = false;
 
         if ($request->hasFile('poster')) {
-            $data['poster'] = $request->file('poster')->store('posters', 'public');
+            $data['poster'] = $this->imageToBase64($request->file('poster'));
         } elseif ($request->filled('poster_url')) {
             $data['poster'] = $request->poster_url;
         }
@@ -95,16 +94,13 @@ class MovieController extends Controller
             'year'     => 'required|integer|min:1900|max:' . (date('Y') + 1),
             'rating'   => 'nullable|numeric|min:0|max:10',
             'duration' => 'nullable|integer|min:1',
-            'poster'   => 'nullable|image|max:2048',
+            'poster'   => 'nullable|image|max:3048',
         ]);
 
         $data = $request->only('title','genre','year','rating','description','director','cast','duration','language','status');
 
         if ($request->hasFile('poster')) {
-            if ($movie->poster && !str_starts_with($movie->poster, 'http')) {
-                Storage::disk('public')->delete($movie->poster);
-            }
-            $data['poster'] = $request->file('poster')->store('posters', 'public');
+            $data['poster'] = $this->imageToBase64($request->file('poster'));
         } elseif ($request->filled('poster_url')) {
             $data['poster'] = $request->poster_url;
         }
@@ -116,9 +112,6 @@ class MovieController extends Controller
     public function destroy(Movie $movie)
     {
         abort_if($movie->user_id !== Auth::id(), 403);
-        if ($movie->poster && !str_starts_with($movie->poster, 'http')) {
-            Storage::disk('public')->delete($movie->poster);
-        }
         $movie->delete();
         return redirect()->route('movies.index')->with('success', 'Movie deleted successfully!');
     }
@@ -128,5 +121,12 @@ class MovieController extends Controller
         abort_if($movie->user_id !== Auth::id(), 403);
         $movie->update(['is_favorite' => !$movie->is_favorite]);
         return back()->with('success', $movie->is_favorite ? 'Added to favorites!' : 'Removed from favorites.');
+    }
+
+    private function imageToBase64($file): string
+    {
+        $mime    = $file->getMimeType();
+        $content = base64_encode(file_get_contents($file->getRealPath()));
+        return 'data:' . $mime . ';base64,' . $content;
     }
 }

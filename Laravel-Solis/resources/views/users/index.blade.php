@@ -28,7 +28,7 @@
                     <td>
                         <div class="d-flex align-items-center gap-2">
                             @if($user->profile_picture)
-                                <img src="{{ Storage::url($user->profile_picture) }}" class="rounded-circle" width="34" height="34" style="object-fit:cover;border:2px solid #e0e7ff">
+                                <img src="{{ $user->profile_picture }}" class="rounded-circle" width="34" height="34" style="object-fit:cover;border:2px solid #e0e7ff">
                             @else
                                 <div style="width:34px;height:34px;border-radius:50%;background:#e0e7ff;display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:700;color:#6366f1">
                                     {{ strtoupper(substr($user->name,0,1)) }}

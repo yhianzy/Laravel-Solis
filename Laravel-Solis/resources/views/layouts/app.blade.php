@@ -271,7 +271,7 @@
         </div>
         <div class="user-badge">
             @if(Auth::user()->profile_picture)
-                <img src="{{ Storage::url(Auth::user()->profile_picture) }}" alt="avatar">
+                <img src="{{ Auth::user()->profile_picture }}" alt="avatar">
             @else
                 <div class="avatar-placeholder">{{ strtoupper(substr(Auth::user()->name,0,1)) }}</div>
             @endif
