@@ -1,0 +1,91 @@
+* {
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    margin: 0;
+    background: #3a3a3a;
+}
+
+.auth-wrapper {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.auth-card {
+    background: #2f2f2f;
+    width: 420px;
+    padding: 40px;
+    border-radius: 25px;
+    text-align: center;
+}
+
+.auth-card h1 {
+    color: white;
+    margin-bottom: 30px;
+}
+
+label {
+    display: block;
+    color: white;
+    text-align: left;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    border-radius: 20px;
+    border: none;
+    margin-bottom: 20px;
+}
+
+.auth-btn {
+    padding: 10px 30px;
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.auth-btn:hover {
+    opacity: 0.85;
+}
+
+.back-btn {
+    position: absolute;
+    top: 40px;
+    left: 40px;
+    background: #555;
+    color: white;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 45px;
+    text-decoration: none;
+    font-size: 20px;
+}
+
+.password-field {
+    position: relative;
+}
+
+.password-field input {
+    padding-right: 45px;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-100%);
+    cursor: pointer;
+    font-size: 18px;
+    color: #555;
+}
