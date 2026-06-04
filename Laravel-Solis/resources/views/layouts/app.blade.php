@@ -50,25 +50,42 @@
             padding: 0 24px; display: flex; align-items: center; gap: 6px;
         }
 
-        /* Brand */
         .nb-brand {
             display: flex; align-items: center; gap: 10px;
             text-decoration: none; margin-right: 12px; flex-shrink: 0;
         }
         .nb-brand-icon {
-            width: 38px; height: 38px;
-            background: linear-gradient(135deg, #6366f1, #8b5cf6);
-            border-radius: 11px;
+            width: 40px; height: 40px;
+            background: linear-gradient(135deg, #818cf8 0%, #6366f1 50%, #4f46e5 100%);
+            border-radius: 12px;
             display: flex; align-items: center; justify-content: center;
-            font-size: 1.1rem; color: #fff;
-            box-shadow: 0 4px 14px rgba(99,102,241,0.45);
+            font-size: 1.15rem; color: #fff;
+            box-shadow: 0 0 0 1px rgba(255,255,255,0.12) inset,
+                        0 4px 16px rgba(99,102,241,0.55),
+                        0 1px 3px rgba(0,0,0,0.3);
+            position: relative; overflow: hidden;
+            transition: transform .2s, box-shadow .2s;
         }
-        .nb-brand-text { color: #fff; font-size: 1.05rem; font-weight: 800; letter-spacing: -0.3px; }
-        .nb-brand-badge {
-            font-size: 0.58rem; font-weight: 600; letter-spacing: 0.5px;
-            background: rgba(99,102,241,0.35); color: #c7d2fe;
-            padding: 2px 7px; border-radius: 20px; border: 1px solid rgba(99,102,241,0.4);
-            display: block; margin-top: 1px;
+        .nb-brand-icon::before {
+            content: '';
+            position: absolute; top: 0; left: 0; right: 0; height: 50%;
+            background: linear-gradient(180deg, rgba(255,255,255,0.22), transparent);
+            border-radius: 12px 12px 0 0;
+        }
+        .nb-brand-icon i { position: relative; z-index: 1; }
+        .nb-brand:hover .nb-brand-icon {
+            transform: scale(1.06);
+            box-shadow: 0 0 0 1px rgba(255,255,255,0.18) inset,
+                        0 6px 22px rgba(99,102,241,0.7),
+                        0 1px 3px rgba(0,0,0,0.3);
+        }
+        .nb-brand-text {
+            color: #fff; font-size: 1.1rem; font-weight: 800;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #fff 30%, #c7d2fe);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         /* Separator */
@@ -332,10 +349,7 @@
         <!-- Brand -->
         <a href="{{ route('dashboard') }}" class="nb-brand">
             <div class="nb-brand-icon"><i class="bi bi-film"></i></div>
-            <div>
-                <div class="nb-brand-text">MovieList</div>
-                <span class="nb-brand-badge">Management System</span>
-            </div>
+            <div class="nb-brand-text">MovieList</div>
         </a>
 
         <div class="nb-sep"></div>
